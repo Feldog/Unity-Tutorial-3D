@@ -15,6 +15,8 @@ public class HanoiTower : MonoBehaviour
     public HanoiStick[] sticks;
 
     public static HanoiStick selectStick;
+    public GameObject select;
+    public Vector3 offset;
 
     IEnumerator Start()
     {
@@ -25,6 +27,22 @@ public class HanoiTower : MonoBehaviour
             sticks[0].PushDonut(donut);
 
             yield return new WaitForSeconds(0.5f);
+        }
+    }
+
+    private void Update()
+    {
+        if(selectStick != null)
+        {
+            if(select.activeSelf == false)
+            {
+                select.SetActive(true);
+            }
+            select.transform.position = selectStick.transform.position + offset;
+        }
+        else if(select.activeSelf)
+        {
+            select.SetActive(false);
         }
     }
 }
