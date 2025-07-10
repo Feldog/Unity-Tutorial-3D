@@ -14,6 +14,13 @@ public class HanoiStick : MonoBehaviour
 
     public Stack<GameObject> stickStack = new Stack<GameObject>();
 
+    private HanoiTower hanoiTower;
+
+    private void Start()
+    {
+        hanoiTower = HanoiTower.Instance;
+    }
+
     public void PushDonut(GameObject donut)
     {
         donut.transform.position = transform.position + Vector3.up * 5f;
@@ -28,6 +35,7 @@ public class HanoiStick : MonoBehaviour
     {
         if (stickStack.Count > 0)
         {
+            
             return stickStack.Pop();
         }
         return null;
@@ -44,28 +52,29 @@ public class HanoiStick : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if(HanoiTower.selectStick == null && stickStack.Count > 0)
+        if(hanoiTower.selectStick == null && stickStack.Count > 0)
         {
             Debug.Log("Select Stick");
-            HanoiTower.selectStick = this;
+            hanoiTower.selectStick = this;
         }
         else
         {
             // SelectStick이 null이고 스택에 도넛이 없는 경우
-            if (HanoiTower.selectStick == null) return;
+            if (hanoiTower.selectStick == null) return;
 
             // SelectStick이 현재 스틱과 다르고, 이동 가능한 도넛인 경우
-            if (HanoiTower.selectStick != this && CanMoveDonut(HanoiTower.selectStick.PeekDonut()))
+            if (hanoiTower.selectStick != this && CanMoveDonut(hanoiTower.selectStick.PeekDonut()))
             {
                 Debug.Log("Click Stick");
-                PushDonut(HanoiTower.selectStick.PopDonut());
-                HanoiTower.selectStick = null;
+                PushDonut(hanoiTower.selectStick.PopDonut());
+                hanoiTower.GetScore();
+                hanoiTower.selectStick = null;
             }
             //  SelectStick이 현재 스틱과 같거나, 이동 불가능한 도넛인 경우
             else
             {
                 Debug.Log("Cannot Move Donut");
-                HanoiTower.selectStick = null;
+                hanoiTower.selectStick = null;
                 return;
             }
         }
